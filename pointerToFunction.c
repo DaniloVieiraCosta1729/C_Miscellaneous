@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// Se passamos o nome de uma função sem '(', então esse nome é endentido como o endereço da instrução 0 da função que está armazenada em .text. 
+// Se passamos o nome de uma função sem '(', então esse nome é entendido como o endereço da instrução 0 da função que está armazenada em .text. 
 
 /*
 |   stack   |
