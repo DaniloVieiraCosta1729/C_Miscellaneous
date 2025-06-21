@@ -1,0 +1,3 @@
+D:/IT/C/C_Miscellaneous/cmake_test/Build/CMakeFiles/programa.dir
+D:/IT/C/C_Miscellaneous/cmake_test/Build/CMakeFiles/edit_cache.dir
+D:/IT/C/C_Miscellaneous/cmake_test/Build/CMakeFiles/rebuild_cache.dir
