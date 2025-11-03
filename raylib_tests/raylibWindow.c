@@ -30,6 +30,10 @@ int main(int argc, char const *argv[])
     {
         BeginDrawing();
 
+        windowH = GetScreenHeight();
+        windowW = GetScreenWidth();
+        calculateCenter(msg, windowW, windowH, font, &width, &height);
+
         ClearBackground(DARKPURPLE);
         DrawText(msg, width, height, font, WHITE);
         DrawCircle(cW, cH, 15, BLACK);
