@@ -22,14 +22,12 @@ int main(int argc, char const *argv[])
     int windowH = 400;
     int font = 20;
 
-    int cW = 30;
-    int cH = 30;
     int mousex;
     int mousey;
     float d;
 
-    Vector2 alpha = {30.0, 30.0};
-    Vector2 alphaVersor = {1.0, 1.0};
+    Vector2 alpha = {30.0f, 30.0f};
+    Vector2 alphaVersor = {1.0f, 1.0f};
     Vector2 eVersor;
 
     calculateCenter(msg, windowW, windowH, font, &width, &height);
@@ -71,19 +69,24 @@ int main(int argc, char const *argv[])
             alphaVersor.y = 1;
         }
 
-        d = sqrt((double)((mousex - alpha.x)*(mousex - alpha.x) + (mousey - alpha.y)*(mousey - alpha.y))); 
+        d = sqrt(((mousex - alpha.x)*(mousex - alpha.x) + (mousey - alpha.y)*(mousey - alpha.y))); 
         
-        if (d < 45)
+        if (d > 0 && d < 45)
         {
             eVersor.x = (alpha.x - mousex) / d;
             eVersor.y = (alpha.y - mousey) / d;
 
-            alphaVersor.x = alphaVersor.x * eVersor.x;
-            alphaVersor.y = alphaVersor.y * eVersor.y;         
+            float prodEscalar = alphaVersor.x * eVersor.x + alphaVersor.y * eVersor.y;
+            alphaVersor.x = alphaVersor.x - 2 * prodEscalar * eVersor.x;
+            alphaVersor.y = alphaVersor.y - 2 * prodEscalar * eVersor.y;
+
+            alpha.x = mousex + eVersor.x * 45;
+            alpha.y = mousey + eVersor.y * 45;
         }
+
      
-        alpha.x += 10*alphaVersor.x;
-        alpha.y += 10*alphaVersor.y;
+        alpha.x += 8*alphaVersor.x;
+        alpha.y += 8*alphaVersor.y;
 
         int tecla;
 
