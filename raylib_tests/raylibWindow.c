@@ -1,6 +1,12 @@
 #include <raylib.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
+
+#define W 0
+#define S 2
+#define D 4
+#define A 8
 
 void calculateCenter(char * text, int windowWidth, int windowHeight, int fontSize, int * width, int * height);
 
@@ -18,8 +24,13 @@ int main(int argc, char const *argv[])
 
     int cW = 30;
     int cH = 30;
-    int directionW = 1;
-    int directionH = 1;
+    int mousex;
+    int mousey;
+    float d;
+
+    Vector2 alpha = {30.0, 30.0};
+    Vector2 alphaVersor = {1.0, 1.0};
+    Vector2 eVersor;
 
     calculateCenter(msg, windowW, windowH, font, &width, &height);
 
@@ -35,27 +46,91 @@ int main(int argc, char const *argv[])
         calculateCenter(msg, windowW, windowH, font, &width, &height);
 
         ClearBackground(DARKPURPLE);
-        DrawText(msg, width, height, font, WHITE);
-        DrawCircle(cW, cH, 15, BLACK);
+        
+        Vector2 mousePosicao = GetMousePosition();
+        mousex = mousePosicao.x;
+        mousey = mousePosicao.y;
 
-        if (cW >= (windowW - 15))
+        DrawCircle(mousex, mousey, 30, YELLOW);
+
+        DrawCircle(alpha.x, alpha.y, 15, BLACK);
+
+        if (alpha.x >= (windowW - 15))
         {
-            directionW = -1;
-        } else if (cW <= 15)
+            alphaVersor.x = -1;
+        } else if (alpha.x <= 15)
         {
-            directionW = 1;
+            alphaVersor.x = 1;
         }
 
-        if (cH >= (windowH - 15))
+        if (alpha.y >= (windowH - 15))
         {
-            directionH = -1;
-        } else if (cH <= 15)
+            alphaVersor.y = -1;
+        } else if (alpha.y <= 15)
         {
-            directionH = 1;
+            alphaVersor.y = 1;
+        }
+
+        d = sqrt((double)((mousex - alpha.x)*(mousex - alpha.x) + (mousey - alpha.y)*(mousey - alpha.y))); 
+        
+        if (d < 45)
+        {
+            eVersor.x = (alpha.x - mousex) / d;
+            eVersor.y = (alpha.y - mousey) / d;
+
+            alphaVersor.x = alphaVersor.x * eVersor.x;
+            alphaVersor.y = alphaVersor.y * eVersor.y;         
         }
      
-        cW += 5*directionW;
-        cH += 10*directionH;
+        alpha.x += 10*alphaVersor.x;
+        alpha.y += 10*alphaVersor.y;
+
+        int tecla;
+
+        if (IsKeyReleased(KEY_A))
+        {
+            alphaVersor.x = -1;
+            tecla = A;
+        }
+        if (IsKeyReleased(KEY_W))
+        {
+            alphaVersor.y = -1;
+            tecla = W;
+        }
+        if (IsKeyReleased(KEY_S))
+        {
+            alphaVersor.y = 1;
+            tecla = S;
+        }
+        if (IsKeyReleased(KEY_D))
+        {
+            alphaVersor.x = 1;
+            tecla = D;
+        }
+
+        switch (tecla)
+        {
+        case A:
+            DrawText("Tecla A", width, height, font, WHITE);
+            break;
+
+        case S:
+            DrawText("Tecla S", width, height, font, WHITE);
+            break;
+
+        case W:
+            DrawText("Tecla W", width, height, font, WHITE);
+            break;
+
+        case D:
+            DrawText("Tecla D", width, height, font, WHITE);
+            break;
+        
+        default:
+            break;
+        }
+        
+        
 
         EndDrawing();
     }
@@ -68,6 +143,6 @@ int main(int argc, char const *argv[])
 void calculateCenter(char * text, int windowWidth, int windowHeight, int fontSize, int * width, int * height)
 {
     int textSize = strcspn(text, "\0 \n");
-    *width = (windowWidth - textSize*10) / 2;
+    *width = (windowWidth - textSize) / 2;
     *height = (windowHeight - fontSize) / 2;
 }
